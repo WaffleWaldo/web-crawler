@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default values
-DEFAULT_DOMAIN="https://example.com"
+DEFAULT_DOMAIN="https://peachystudio.com"
 DEFAULT_CONFIG="configs/default.yaml"
 MONGO_URI=""  # Leave empty by default
 

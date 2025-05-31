@@ -1,8 +1,8 @@
 # Crawler settings
 crawler:
   workers: 5              # Number of concurrent workers
-  rate_limit: 500         # Milliseconds between requests (per worker)
-  timeout: 30             # Request timeout in seconds
+  rate_limit: 500ms       # Milliseconds between requests (per worker)
+  timeout: 30s            # Request timeout in seconds
   max_depth: 10           # Maximum crawl depth from seed URL
   max_pages: 1000         # Maximum number of pages to crawl (0 for unlimited)
 
@@ -11,19 +11,21 @@ storage:
   mongodb:
     database: "webcrawler"
     collection: "webpages"
-    timeout: 10           # Connection timeout in seconds
-    max_pool_size: 100    # Maximum number of connections
+    timeout: 30s          # Connection timeout
+    max_pool_size: 50     # Maximum number of connections in the pool
+    min_pool_size: 10     # Minimum number of connections to maintain
+    max_idle_time: 5m     # Maximum time a connection can remain idle
 
 # HTTP client settings
 http:
   user_agent: "GoWebCrawler/1.0"
   follow_redirects: true
   max_redirects: 10
-  timeout: 30            # Request timeout in seconds
+  timeout: 30s           # Request timeout in seconds
   retry:
     max_attempts: 3
-    initial_delay: 1     # Seconds
-    max_delay: 5         # Seconds
+    initial_delay: 1s    # Initial retry delay
+    max_delay: 5s        # Maximum retry delay
 
 # URL filtering
 filters:
@@ -53,4 +55,9 @@ filters:
     - ".xls"
     - ".xlsx"
     - ".ppt"
-    - ".pptx" 
+    - ".pptx"
+
+benchmark:
+  enabled: true
+  interval: 1s           # Metric collection interval
+  output_dir: "benchmarks" 

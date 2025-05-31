@@ -10,6 +10,7 @@ A high-performance, concurrent web crawler written in Go with MongoDB integratio
 - **Configurable**: YAML-based configuration for easy customization
 - **URL Filtering**: Configurable domain, path, and file type filtering
 - **Graceful Shutdown**: Proper handling of shutdown signals
+- **Performance Benchmarking**: Real-time performance monitoring with graph generation
 - **HTTP Features**:
   - Custom User-Agent
   - Configurable redirects
@@ -25,6 +26,7 @@ A high-performance, concurrent web crawler written in Go with MongoDB integratio
 ├── configs/             # Configuration files
 │   └── default.yaml     # Default configuration
 ├── internal/            # Internal packages
+│   ├── benchmark/      # Performance benchmarking
 │   ├── config/         # Configuration handling
 │   ├── crawler/        # Core crawler implementation
 │   ├── queue/          # URL queue management
@@ -109,6 +111,14 @@ The crawler is configured via YAML files in the `configs/` directory. The defaul
        - ".jpg"
    ```
 
+5. **Benchmark Settings**:
+   ```yaml
+   benchmark:
+     enabled: true          # Enable performance benchmarking
+     interval: 1s           # Metric collection interval
+     output_dir: "benchmarks" # Directory for graph output
+   ```
+
 ## Usage
 
 ### Using the Run Script
@@ -163,6 +173,38 @@ When MongoDB integration is enabled:
    }
    ```
 
+## Performance Benchmarking
+
+The crawler includes real-time performance monitoring that generates graphs showing:
+
+1. **Pages Crawled vs Time**: Shows the rate of page crawling over time
+2. **Crawled/Queued Ratio vs Time**: Shows the efficiency of the crawler in processing the URL queue
+
+Graphs are automatically generated in the configured output directory (default: `benchmarks/`) when the crawler stops. Each graph is saved with a timestamp in the filename for easy tracking of different crawl sessions.
+
+### Reading the Graphs
+
+1. **Pages Crawled vs Time**:
+   - X-axis: Time in seconds since start
+   - Y-axis: Total number of pages crawled
+   - Helps identify crawling speed and any slowdowns
+
+2. **Crawled/Queued Ratio vs Time**:
+   - X-axis: Time in seconds since start
+   - Y-axis: Ratio of crawled pages to queued URLs
+   - Ratio > 1: Crawler is keeping up with new URLs
+   - Ratio < 1: Queue is growing faster than crawling
+
+### Benchmark Configuration
+
+Adjust benchmark settings in your config file:
+```yaml
+benchmark:
+  enabled: true          # Enable/disable benchmarking
+  interval: 1s           # How often to collect metrics
+  output_dir: "benchmarks" # Where to save the graphs
+```
+
 ## Development
 
 ### Adding New Features
@@ -170,6 +212,7 @@ When MongoDB integration is enabled:
 1. **Storage Backends**: Implement the `storage.Archiver` interface in `internal/storage/`
 2. **URL Filters**: Add new filters in `internal/crawler/crawler.go`
 3. **Configuration**: Extend the config structs in `internal/config/config.go`
+4. **Benchmarks**: Add new metrics in `internal/benchmark/types.go`
 
 ### Running Tests
 
