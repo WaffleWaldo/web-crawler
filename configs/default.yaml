@@ -1,60 +1,49 @@
-# Crawler settings
-crawler:
-  workers: 5              # Number of concurrent workers
-  rate_limit: 500ms       # Milliseconds between requests (per worker)
-  timeout: 30s            # Request timeout in seconds
-  max_depth: 10           # Maximum crawl depth from seed URL
-  max_pages: 1000         # Maximum number of pages to crawl (0 for unlimited)
+# High-Performance Crawler Configuration
 
-# MongoDB settings
+# Crawler settings - Optimized for performance
+crawler:
+  workers: 20             # Increased workers for higher concurrency (was 5)
+  rate_limit: 100ms       # Much faster rate limiting (was 500ms)
+  timeout: 15s            # Faster timeout for responsive servers
+  max_depth: 10           # Maximum crawl depth from seed URL
+  max_pages: 5000         # Higher page limit for testing (was 1000)
+
+# MongoDB settings (optional - can work without MongoDB)
 storage:
   mongodb:
     database: "webcrawler"
     collection: "webpages"
-    timeout: 30s          # Connection timeout
-    max_pool_size: 50     # Maximum number of connections in the pool
-    min_pool_size: 10     # Minimum number of connections to maintain
-    max_idle_time: 5m     # Maximum time a connection can remain idle
+    timeout: 15s          # Faster timeout
+    max_pool_size: 100    # Higher connection pool
+    min_pool_size: 20     # Higher minimum pool
+    max_idle_time: 3m     # Shorter idle time
 
-# HTTP client settings
+# HTTP client settings - Optimized for performance
 http:
-  user_agent: "GoWebCrawler/1.0"
+  user_agent: "HighPerformanceWebCrawler/2.0"
   follow_redirects: true
-  max_redirects: 10
-  timeout: 30s           # Request timeout in seconds
+  max_redirects: 5        # Reduced from 10 for speed
+  timeout: 15s            # Faster timeout (was 30s)
 
-# URL filtering
+# URL filtering settings
 filters:
-  allowed_domains: []    # Empty means same domain as seed
-  excluded_paths:        # Paths to skip
-    - "/wp-admin"
-    - "/wp-login"
-    - "/wp-content"
-    - "/admin"
-    - "/login"
-  allowed_schemes:       # URL schemes to allow
-    - "http"
-    - "https"
-  excluded_extensions:   # File extensions to skip
-    - ".pdf"
-    - ".jpg"
-    - ".jpeg"
-    - ".png"
-    - ".gif"
-    - ".zip"
-    - ".tar"
-    - ".gz"
-    - ".rar"
-    - ".exe"
-    - ".doc"
-    - ".docx"
-    - ".xls"
-    - ".xlsx"
-    - ".ppt"
-    - ".pptx"
+  allowed_schemes: ["http", "https"]
+  allowed_domains: []     # Empty = same domain only
+  excluded_paths: [
+    "/wp-admin/", "/admin/", "/login/", "/logout/",
+    "/api/", "/ajax/", "/search/", "/feed/",
+    "/rss/", "/atom/", "/.git/", "/node_modules/"
+  ]
+  excluded_extensions: [
+    ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
+    ".zip", ".rar", ".tar", ".gz", ".7z",
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp",
+    ".mp3", ".mp4", ".avi", ".mov", ".wmv", ".flv",
+    ".css", ".js", ".json", ".xml", ".ico", ".woff", ".woff2", ".ttf", ".eot"
+  ]
 
-# Performance benchmarking
+# Benchmarking settings
 benchmark:
   enabled: true
-  interval: 1s           # Metric collection interval
+  interval: 1s            # Record metrics every second
   output_dir: "benchmarks" 
