@@ -42,4 +42,7 @@ data/
 
 # Environment variables
 .env
-.env.local 
+.env.local
+
+crawled_content/go_dev
+crawled_content/peachystudio_com

@@ -1,49 +1,58 @@
-# High-Performance Crawler Configuration
+# Ultra-High-Performance Crawler Configuration - Optimized for Maximum Throughput
 
-# Crawler settings - Optimized for performance
+# Crawler settings - Extreme performance optimization
 crawler:
-  workers: 20             # Increased workers for higher concurrency (was 5)
-  rate_limit: 100ms       # Much faster rate limiting (was 500ms)
-  timeout: 15s            # Faster timeout for responsive servers
+  workers: 40             # Increased workers for maximum parallelism (was 20)
+  rate_limit: 50ms        # Even faster rate limiting (was 100ms)
+  timeout: 10s            # Faster timeout for maximum speed
   max_depth: 10           # Maximum crawl depth from seed URL
-  max_pages: 5000         # Higher page limit for testing (was 1000)
+  max_pages: 10000        # Higher page limit for testing (was 5000)
+
+# Content saving settings - Save crawled pages to files
+content_saver:
+  enabled: true                    # Enable saving page content to files
+  output_dir: "crawled_content"    # Directory to save content files
+  max_file_size: 5242880          # Max file size to save (5MB in bytes)
+  save_metadata: true             # Include metadata headers in saved files
 
 # MongoDB settings (optional - can work without MongoDB)
 storage:
   mongodb:
     database: "webcrawler"
     collection: "webpages"
-    timeout: 15s          # Faster timeout
-    max_pool_size: 100    # Higher connection pool
-    min_pool_size: 20     # Higher minimum pool
-    max_idle_time: 3m     # Shorter idle time
+    timeout: 10s          # Even faster timeout
+    max_pool_size: 200    # Higher connection pool (was 100)
+    min_pool_size: 50     # Higher minimum pool (was 20)
+    max_idle_time: 2m     # Shorter idle time (was 3m)
 
-# HTTP client settings - Optimized for performance
+# HTTP client settings - Optimized for extreme performance
 http:
-  user_agent: "HighPerformanceWebCrawler/2.0"
+  user_agent: "UltraHighPerformanceWebCrawler/3.0"
   follow_redirects: true
-  max_redirects: 5        # Reduced from 10 for speed
-  timeout: 15s            # Faster timeout (was 30s)
+  max_redirects: 3        # Reduced from 5 for speed
+  timeout: 10s            # Faster timeout (was 15s)
 
-# URL filtering settings
+# URL filtering settings - Optimized for speed
 filters:
   allowed_schemes: ["http", "https"]
   allowed_domains: []     # Empty = same domain only
   excluded_paths: [
     "/wp-admin/", "/admin/", "/login/", "/logout/",
     "/api/", "/ajax/", "/search/", "/feed/",
-    "/rss/", "/atom/", "/.git/", "/node_modules/"
+    "/rss/", "/atom/", "/.git/", "/node_modules/",
+    "/cgi-bin/", "/phpmyadmin/", "/webmail/"
   ]
   excluded_extensions: [
     ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
-    ".zip", ".rar", ".tar", ".gz", ".7z",
-    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp",
-    ".mp3", ".mp4", ".avi", ".mov", ".wmv", ".flv",
-    ".css", ".js", ".json", ".xml", ".ico", ".woff", ".woff2", ".ttf", ".eot"
+    ".zip", ".rar", ".tar", ".gz", ".7z", ".bz2",
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".svg", ".webp", ".ico",
+    ".mp3", ".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv",
+    ".css", ".js", ".json", ".xml", ".woff", ".woff2", ".ttf", ".eot",
+    ".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"
   ]
 
-# Benchmarking settings
+# Enhanced benchmarking settings
 benchmark:
   enabled: true
-  interval: 1s            # Record metrics every second
+  interval: 500ms         # More frequent metrics recording (was 1s)
   output_dir: "benchmarks" 

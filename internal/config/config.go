@@ -10,11 +10,12 @@ import (
 
 // Config represents the main configuration structure
 type Config struct {
-	Crawler   CrawlerConfig   `yaml:"crawler"`
-	Storage   StorageConfig   `yaml:"storage"`
-	HTTP      HTTPConfig      `yaml:"http"`
-	Filters   FiltersConfig   `yaml:"filters"`
-	Benchmark BenchmarkConfig `yaml:"benchmark"`
+	Crawler      CrawlerConfig      `yaml:"crawler"`
+	ContentSaver ContentSaverConfig `yaml:"content_saver"`
+	Storage      StorageConfig      `yaml:"storage"`
+	HTTP         HTTPConfig         `yaml:"http"`
+	Filters      FiltersConfig      `yaml:"filters"`
+	Benchmark    BenchmarkConfig    `yaml:"benchmark"`
 }
 
 // CrawlerConfig holds crawler-specific settings
@@ -29,6 +30,14 @@ type CrawlerConfig struct {
 // GetRateLimit returns the rate limit as a time.Duration
 func (c *CrawlerConfig) GetRateLimit() time.Duration {
 	return c.RateLimit
+}
+
+// ContentSaverConfig holds content saving settings
+type ContentSaverConfig struct {
+	Enabled     bool   `yaml:"enabled"`
+	OutputDir   string `yaml:"output_dir"`
+	MaxFileSize int64  `yaml:"max_file_size"`
+	SaveMeta    bool   `yaml:"save_metadata"`
 }
 
 // StorageConfig holds storage-related settings
@@ -93,6 +102,12 @@ func DefaultConfig() *Config {
 			Timeout:   30 * time.Second,
 			MaxDepth:  10,
 			MaxPages:  1000,
+		},
+		ContentSaver: ContentSaverConfig{
+			Enabled:     false,
+			OutputDir:   "crawled_content",
+			MaxFileSize: 5242880, // 5MB
+			SaveMeta:    true,
 		},
 		Storage: StorageConfig{
 			MongoDB: MongoDBConfig{
