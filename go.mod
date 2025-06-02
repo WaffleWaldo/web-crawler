@@ -7,6 +7,7 @@ toolchain go1.24.3
 require (
 	go.mongodb.org/mongo-driver v1.13.1
 	golang.org/x/net v0.21.0
+	gonum.org/v1/plot v0.16.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -30,5 +31,4 @@ require (
 	golang.org/x/image v0.25.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
-	gonum.org/v1/plot v0.16.0 // indirect
 )

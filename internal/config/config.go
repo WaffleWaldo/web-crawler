@@ -52,14 +52,6 @@ type HTTPConfig struct {
 	FollowRedirect bool          `yaml:"follow_redirects"`
 	MaxRedirects   int           `yaml:"max_redirects"`
 	Timeout        time.Duration `yaml:"timeout"`
-	Retry          RetryConfig   `yaml:"retry"`
-}
-
-// RetryConfig holds retry settings
-type RetryConfig struct {
-	MaxAttempts  int           `yaml:"max_attempts"`
-	InitialDelay time.Duration `yaml:"initial_delay"`
-	MaxDelay     time.Duration `yaml:"max_delay"`
 }
 
 // FiltersConfig holds URL filtering settings
@@ -97,7 +89,7 @@ func DefaultConfig() *Config {
 	return &Config{
 		Crawler: CrawlerConfig{
 			Workers:   5,
-			RateLimit: 500 * time.Millisecond, // 500ms between requests
+			RateLimit: 500 * time.Millisecond,
 			Timeout:   30 * time.Second,
 			MaxDepth:  10,
 			MaxPages:  1000,
@@ -117,11 +109,6 @@ func DefaultConfig() *Config {
 			FollowRedirect: true,
 			MaxRedirects:   10,
 			Timeout:        30 * time.Second,
-			Retry: RetryConfig{
-				MaxAttempts:  3,
-				InitialDelay: 1 * time.Second,
-				MaxDelay:     5 * time.Second,
-			},
 		},
 		Filters: FiltersConfig{
 			AllowedDomains: []string{},
@@ -144,9 +131,9 @@ func DefaultConfig() *Config {
 			},
 		},
 		Benchmark: BenchmarkConfig{
-			Enabled:   false,
-			Interval:  0,
-			OutputDir: "",
+			Enabled:   true,
+			Interval:  1 * time.Second,
+			OutputDir: "benchmarks",
 		},
 	}
 }

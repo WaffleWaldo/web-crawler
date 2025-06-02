@@ -15,7 +15,6 @@ A high-performance, concurrent web crawler written in Go with MongoDB integratio
   - Custom User-Agent
   - Configurable redirects
   - Timeout handling
-  - Retry mechanism
 
 ## Project Structure
 
@@ -57,6 +56,11 @@ A high-performance, concurrent web crawler written in Go with MongoDB integratio
    go mod download
    ```
 
+3. Build the crawler:
+   ```bash
+   go build -o crawler ./cmd/crawler
+   ```
+
 ## Configuration
 
 The crawler is configured via YAML files in the `configs/` directory. The default configuration is in `configs/default.yaml`.
@@ -67,8 +71,8 @@ The crawler is configured via YAML files in the `configs/` directory. The defaul
    ```yaml
    crawler:
      workers: 5              # Number of concurrent workers
-     rate_limit: 500         # Milliseconds between requests
-     timeout: 30             # Request timeout in seconds
+     rate_limit: 500ms       # Milliseconds between requests
+     timeout: 30s            # Request timeout in seconds
      max_depth: 10           # Maximum crawl depth
      max_pages: 1000         # Maximum pages to crawl (0 for unlimited)
    ```
@@ -79,8 +83,10 @@ The crawler is configured via YAML files in the `configs/` directory. The defaul
      mongodb:
        database: "webcrawler"
        collection: "webpages"
-       timeout: 10           # Connection timeout
-       max_pool_size: 100    # Connection pool size
+       timeout: 30s          # Connection timeout
+       max_pool_size: 50     # Connection pool size
+       min_pool_size: 10     # Minimum connections to maintain
+       max_idle_time: 5m     # Maximum connection idle time
    ```
 
 3. **HTTP Settings**:
@@ -89,11 +95,7 @@ The crawler is configured via YAML files in the `configs/` directory. The defaul
      user_agent: "GoWebCrawler/1.0"
      follow_redirects: true
      max_redirects: 10
-     timeout: 30
-     retry:
-       max_attempts: 3
-       initial_delay: 1
-       max_delay: 5
+     timeout: 30s
    ```
 
 4. **URL Filtering**:
@@ -120,6 +122,19 @@ The crawler is configured via YAML files in the `configs/` directory. The defaul
    ```
 
 ## Usage
+
+### Direct Usage
+
+```bash
+# Basic usage without MongoDB storage
+./crawler -seed "https://example.com" -config "configs/default.yaml"
+
+# With MongoDB storage
+./crawler -seed "https://example.com" -mongo "mongodb://localhost:27017" -config "configs/default.yaml"
+
+# With MongoDB Atlas
+./crawler -seed "https://example.com" -mongo "mongodb+srv://user:pass@cluster.mongodb.net"
+```
 
 ### Using the Run Script
 
@@ -149,7 +164,7 @@ The `scripts/run.sh` script provides an easy way to run the crawler:
 
 ## MongoDB Integration
 
-When MongoDB integration is enabled:
+When MongoDB integration is enabled (by providing a connection string):
 
 1. Each crawled page is stored with:
    - URL
@@ -172,6 +187,8 @@ When MongoDB integration is enabled:
      "content_type": "text/html"
    }
    ```
+
+When no MongoDB connection is provided, pages are crawled but not stored, which is useful for testing or analyzing website structure.
 
 ## Performance Benchmarking
 
